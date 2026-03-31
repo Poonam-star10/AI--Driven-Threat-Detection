@@ -4,7 +4,7 @@
 # anomaly detection for SOC automation
 
 import pandas as pd
-import numpy as np
+import numphy as np
 from datetime import datetime
 
 # Sample security log data
