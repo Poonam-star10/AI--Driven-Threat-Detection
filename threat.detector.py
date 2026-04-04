@@ -55,7 +55,7 @@ if __name__ == "__main__":
 def scan_vulnerabilities(logs):
     vulnerabilities = []
     for index, row in logs.iterrows():
-        # Check for SQL Injection attempt
+        # SQL Injection attempt
         if 'sql' in str(row['event_type']).lower():
             vulnerabilities.append({
                 'ip': row['ip_address'],
