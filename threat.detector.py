@@ -47,7 +47,28 @@ def main():
             print(f"Threat: {threat['threat']}")
             print(f"Severity: {threat['severity']}")
     else:
-        print("✅ No threats detected")
+        print("No threats detected")
 
 if __name__ == "__main__":
     main()
+# Vulnerability Scanner Function
+def scan_vulnerabilities(logs):
+    vulnerabilities = []
+    for index, row in logs.iterrows():
+        # Check for SQL Injection attempt
+        if 'sql' in str(row['event_type']).lower():
+            vulnerabilities.append({
+                'ip': row['ip_address'],
+                'type': 'SQL Injection Attempt',
+                'severity': 'CRITICAL',
+                'cvss_score': 9.8
+            })
+        # Check for port scanning
+        if row['attempts'] > 10:
+            vulnerabilities.append({
+                'ip': row['ip_address'],
+                'type': 'Port Scan Detected',
+                'severity': 'HIGH',
+                'cvss_score': 7.5
+            })
+    return vulnerabilities
