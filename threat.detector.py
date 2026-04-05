@@ -72,3 +72,84 @@ def scan_vulnerabilities(logs):
                 'cvss_score': 7.5
             })
     return vulnerabilities
+# Machine Learning Anomaly Detection
+from sklearn.ensemble import IsolationForest
+import numpy as np
+
+def ml_anomaly_detection(attempts_data):
+    """
+    Uses AI to detect unusual behaviour
+    in security logs automatically
+    """
+    # Create AI model
+    model = IsolationForest(
+        contamination=0.1,
+        random_state=42
+    )
+    
+    # Prepare data for AI model
+    data = np.array(attempts_data).reshape(-1, 1)
+    
+    # Train the AI model
+    model.fit(data)
+    
+    # AI predicts anomalies
+    # -1 means anomaly, 1 means normal
+    predictions = model.predict(data)
+    
+    anomalies = []
+    for i, pred in enumerate(predictions):
+        if pred == -1:
+            anomalies.append({
+                'index': i,
+                'attempts': attempts_data[i],
+                'status': 'ANOMALY DETECTED',
+                'severity': 'HIGH',
+                'action': 'INVESTIGATE IMMEDIATELY'
+            })
+    return anomalies
+
+# Automated Security Report Generator
+def generate_security_report(
+    threats, vulnerabilities, anomalies):
+    """
+    Generates automated security report
+    This is the core SOC automation feature
+    """
+    print("\n" + "="*45)
+    print("  AI-DRIVEN SOC SECURITY REPORT")
+    print("="*45)
+    print(f"Total Threats:         {len(threats)}")
+    print(f"Total Vulnerabilities: {len(vulnerabilities)}")
+    print(f"AI Anomalies:          {len(anomalies)}")
+    print("="*45)
+    
+    # Print threats
+    if threats:
+        print("\n ACTIVE THREATS:")
+        for t in threats:
+            print(f"  IP: {t['ip']}")
+            print(f"  Type: {t['threat']}")
+            print(f"  Severity: {t['severity']}")
+            print("  ---")
+    
+    # Print vulnerabilities        
+    if vulnerabilities:
+        print("\n VULNERABILITIES FOUND:")
+        for v in vulnerabilities:
+            print(f"  IP: {v['ip']}")
+            print(f"  Type: {v['type']}")
+            print(f"  CVSS Score: {v['cvss_score']}")
+            print("  ---")
+    
+    # Print AI anomalies
+    if anomalies:
+        print("\n AI DETECTED ANOMALIES:")
+        for a in anomalies:
+            print(f"  Attempts: {a['attempts']}")
+            print(f"  Status: {a['status']}")
+            print(f"  Action: {a['action']}")
+            print("  ---")
+    
+    print("\n Automated report complete!")
+    print("="*45)
