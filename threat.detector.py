@@ -153,3 +153,4 @@ def generate_security_report(
     
     print("\n Automated report complete!")
     print("="*45)
+complete SOC automation system v1.0
